@@ -22,14 +22,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getMessage: async () => {
-				try{
+				try {
 					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
 					return data;
-				}catch(error){
+				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
 			},
@@ -46,6 +46,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			signUp: async (email, password, passwordConfirmation) => {
+				try {
+
+					const bodyData = {
+						email: email,
+						password: password,
+						passwordConfirmation: passwordConfirmation
+					}
+
+					const options = {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(bodyData)
+					};
+
+					// fetching data from the backend
+					const response = await fetch(`${process.env.BACKEND_URL}/api/sign_up`, options);
+					const msg = await response.json()
+
+					// don't forget to return something, that is how the async resolves
+					return msg;
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
 			}
 		}
 	};
